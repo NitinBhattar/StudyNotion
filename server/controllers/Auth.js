@@ -35,9 +35,6 @@ const generateOtp = async () => {
         throw new Error("Failed to generate otp");
     }
 
-    // Cleanup
-    console.log("Otp generated ", otp);
-
     return otp;
 };
 

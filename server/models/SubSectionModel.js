@@ -13,6 +13,10 @@ const subSectionSchema = new mongoose.Schema({
     },
     videoUrl: {
         type: String
+    },
+    // Cloudinary public_id
+    videoId: {
+        type: String
     }
 });
 

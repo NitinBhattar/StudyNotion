@@ -42,9 +42,12 @@ const courseSchema = new mongoose.Schema({
     thumbnailUrl: {
         type: String
     },
-    tag: {
+    thumbnailId: {
+        type: String
+    },
+    category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "TagModel"
+        ref: "CategoryModel"
     },
     // Array
     studentsEnrolled: [

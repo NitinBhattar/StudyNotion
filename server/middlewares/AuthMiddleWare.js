@@ -27,9 +27,6 @@ const authMiddleware = async (req, res, next) => {
         try {
             const decode = await jwt.verify(token, process.env.JWT_SECRET);
             req.user = decode;
-
-            // Cleanup
-            console.log(decode);
         }
         catch(error) {
             // 401 is Unauthorized

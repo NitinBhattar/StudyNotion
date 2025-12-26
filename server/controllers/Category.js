@@ -1,8 +1,8 @@
 // Import
-const TagModel = require("../models/TagModel.js");
+const CategoryModel = require("../models/CategoryModel.js");
 
-// Create Tag
-const createTag = async (req, res) => {
+// Create Category
+const createCategory = async (req, res) => {
     try {
         // Fetching data
         const {name, description} = req.body;
@@ -16,25 +16,25 @@ const createTag = async (req, res) => {
             });
         }
 
-        // Check if tag already exists or not
-        const existingTag = await TagModel.findOne({name});
+        // Check if category already exists or not
+        const existingCategory = await CategoryModel.findOne({name});
 
-        // Tag already exists
-        if(existingTag) {
+        // Category already exists
+        if(existingCategory) {
             // 409 is conflict
             return res.status(409).json({
                 success: false,
-                message: "Tag already exists"
+                message: "Category already exists"
             });
         }
 
         // Create entry in DB
-        const tagDetails = await TagModel.create({name, description});
+        const categoryDetails = await CategoryModel.create({name, description});
 
         // 201 is success for new resource allocation
         return res.status(201).json({
             success: true,
-            message: "Tag created successfully"
+            message: "Category created successfully"
         });
     }
     catch(error) {
@@ -42,22 +42,22 @@ const createTag = async (req, res) => {
         // 500 is Internal Server Error
         return res.status(500).json({
             success: false,
-            message: "Failed creating tags"
+            message: "Failed creating Category"
         });
     }
 };
 
-// Show All Tags
-const showAllTags = async (req, res) => {
+// Show All Categories
+const showAllCategories = async (req, res) => {
     try {
-        // Fetch tags, getting only selected data i.e marked true
-        const allTags = await TagModel.find({}, {name: true, description: true});
+        // Fetch categories, getting only selected data i.e marked true
+        const allCategories = await CategoryModel.find({}, {name: true, description: true});
 
         // 200 is OK
         return res.status(200).json({
             success: true,
-            message: "All tags fetched successfully",
-            data: allTags
+            message: "All categories fetched successfully",
+            data: allCategories
         });
     }
     catch(error) {
@@ -65,10 +65,10 @@ const showAllTags = async (req, res) => {
         // 500 is Internal Server Error
         return res.status(500).json({
             success: false,
-            message: "Failed fetching all tags"
+            message: "Failed fetching all categories"
         });        
     }
 };
 
 // Export
-module.exports = {createTag, showAllTags}
+module.exports = {createCategory, showAllCategories}

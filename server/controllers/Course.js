@@ -1,26 +1,26 @@
 // Import
 const CourseModel = require("../models/CourseModel.js");
-const TagModel = require("../models/TagModel.js");
+const CategoryModel = require("../models/CategoryModel.js");
 const UserModel = require("../models/UserModel.js");
-const imageUploader = require("../utils/imageUploader.js");
+const cloudinaryUploader = require("../utils/cloudinaryUploader.js");
 require("dotenv").config();
 
 // Create Course
 const createCourse = async (req, res) => {
     try {
-        // Fetching data
+        // Fetching data & files
         const { 
             courseName,
             courseDescription,
             whatYouWillLearn,
             price,
-            tag
+            category
             } = req.body;
 
         const thumbnail = req?.files?.thumbnailImage;
 
         // Fields are missing
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag || !thumbnail) {
+        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !category || !thumbnail) {
             // 400 is Bad Request
             return res.status(400).json({
                 success: false,
@@ -48,19 +48,19 @@ const createCourse = async (req, res) => {
             });
         }
 
-        // Valid Tag, tag is an id
-        const tagDetails = await TagModel.findById(tag);
+        // Valid Category, Category is an id
+        const categoryDetails = await CategoryModel.findById(category);
 
-        if(!tagDetails) {
+        if(!categoryDetails) {
             // 404 is Not Found
             return res.status(404).json({
                 success: false,
-                message: "Tag not found"
+                message: "Category not found"
             });            
         }
 
         // Uplaod image to Cloudinary
-        const thumbnailDetails = await imageUploader(thumbnail, process.env.CLOUDINARY_COURSE_THUMBNAIL_FOLDER, 80);
+        const thumbnailDetails = await cloudinaryUploader(thumbnail, process.env.CLOUDINARY_COURSE_THUMBNAIL_FOLDER, 80);
 
         // Create course entry in DB
         const newCourse = await CourseModel.create(
@@ -71,15 +71,34 @@ const createCourse = async (req, res) => {
                 whatYouWillLearn,
                 price: Number(price),
                 thumbnailUrl: thumbnailDetails.secure_url,
-                tag
+                thumbnailId: thumbnailDetails.public_id,
+                category
             }
         );
 
-        // Create course entry in tag as well, $push / $addToSet(no duplicacy) and $pull for array in MongoDB
-        const updatedTag = await TagModel.findByIdAndUpdate(tag, {$addToSet : {courses: newCourse._id}}, {new: true});
+        // Create course entry in category as well, $push / $addToSet(no duplicacy) and $pull for array in MongoDB
+        const updatedCategory = await CategoryModel.findByIdAndUpdate(category, {$push : {courses: newCourse._id}}, {new: true});
+
+        // Mongo fail check
+        if(!updatedCategory) {
+            // 404 is Not Found
+            return res.status(404).json({
+                success: false,
+                message: "Category not found"
+            });
+        }
 
         // Create course entry in instructor as well
-        const updatedUser = await UserModel.findByIdAndUpdate(userId, {$addToSet : {courses: newCourse._id}}, {new: true});
+        const updatedUser = await UserModel.findByIdAndUpdate(userId, {$push : {courses: newCourse._id}}, {new: true});
+
+        // Mongo fail check
+        if(!updatedUser) {
+            // 404 is Not fFund
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
 
         // 201 is success for new resource allocation
         return res.status(201).json({
