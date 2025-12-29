@@ -106,7 +106,7 @@ const updateSection = async (req, res) => {
         // Update in DB
         const updatedSection = await SectionModel.findByIdAndUpdate(sectionId, {sectionName}, {new: true});
 
-        // MongoDB fail
+        // MongoDB fail check
         if(!updatedSection) {
             // 404 is course not found
             return res.status(404).json({
@@ -165,11 +165,10 @@ const deleteSection = async (req, res) => {
             )
         );
 
-
         // Delete from course
         const updatedCourse = await CourseModel.findByIdAndUpdate(courseId, {$pull: {courseContent: sectionDetails._id}}, {new: true});
 
-        // MongoDB fail
+        // MongoDB fail check
         if(!updatedCourse) {
             // 404 is Not Found
             return res.status(404).json({

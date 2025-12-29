@@ -68,8 +68,14 @@ const sendOtp = async(req, res) => {
             otp: hashedOtp
         });
 
-        // Cleanup
-        console.log(otpEntry);
+        // MongoDB fail check
+        if(!otpEntry) {
+            // 400 is Bad request
+            return res.status(400).json({
+                success: false,
+                message: "Otp couldn't be generated, please try again later"
+            });            
+        }
 
         // 200 is OK
         return res.status(200).json({
@@ -178,6 +184,15 @@ const signup = async (req, res) => {
             additionalDetails: newProfile._id,
             imageUrl: `https://api.dicebear.com/9.x/pixel-art/svg?seed=${firstName} ${lastName}`
         });
+
+        // MongoDB fail check
+        if(!newUser) {
+            // 404 is Not Found
+            return res.status(404).json({
+                success: false,
+                message: "Failed signing-up new user, please try again later"
+            });            
+        }
 
         // 201 is success for new resource allocation
         return res.status(201).json({
@@ -317,6 +332,15 @@ const changePassword = async (req, res) => {
         const newHashedPassword = await bcrypt.hash(newPassword, 10);
         // Update in DB
         const updatedUser = await UserModel.findByIdAndUpdate(user._id, {password: newHashedPassword}, {new:true});
+
+        // MongoDB fail check
+        if(!updatedUser) {
+            // 400 is Bad request
+            return res.status(400).json({
+                success: false,
+                message: "Password couldn't be changed, please try again later"
+            });            
+        }
 
         // Sending mail
         mailSender(email, "Password changed", "Password updated successfully");

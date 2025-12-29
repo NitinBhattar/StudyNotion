@@ -2,6 +2,7 @@
 const UserModel = require("../models/UserModel.js");
 const ProfileModel = require("../models/ProfileModel.js");
 const CourseModel = require("../models/CourseModel.js");
+const courseDeleteById = require("../services/courseDeleteById.js")
 
 // Update Profile
 const updateProfile = async (req, res) => {
@@ -112,10 +113,28 @@ const deleteProfile = async (req, res) => {
             });
         }
 
-        // Deleting profile & user
+        // Deleting profile
         await ProfileModel.findByIdAndDelete(userDetails.additionalDetails);
         
-        // Courses
+        // If user is a instructor, it will remove all its created courses
+        if(userDetails.accountType === "Instructor") {
+            await Promise.all(
+                userDetails.courses.map(courseId =>
+                    courseDeleteById(courseId)
+                )
+            );
+        }
+
+        // If user is a student, it will remove all its enrolled courses
+        if(userDetails.accountType === "Student") {
+            await Promise.all(
+                userDetails.courses.map(courseId =>
+                    CourseModel.findByIdAndUpdate(courseId, {$pull: {studentsEnrolled: userId}})
+                )
+            );
+        }
+
+        // Deleting User
         await UserModel.findByIdAndDelete(userId);
 
         // 200 is OK
@@ -134,5 +153,52 @@ const deleteProfile = async (req, res) => {
     }
 };
 
+// Get user details
+const showUserDetails = async (req, res) => {
+    try {
+        // Fetching data
+        const userId = req.user.id;
+
+        // Failed fetching user
+        if(!userId) {
+            // 400 is Bad Request
+            return res.status(400).json({
+                success: false,
+                message: "User Id is missing"
+            });
+        }
+
+        // Fetching user details
+        const userDetails = await UserModel.findById(userId).populate("additionalDetails").lean().exec();
+
+        // User details not found
+        if(!userDetails) {
+            // 404 is Not Found
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        // Remove password
+        delete userDetails.password;
+
+        // 200 is OK
+        return res.status(200).json({
+            success: true,
+            message: "User details fetched successfully",
+            data: userDetails
+        });
+    }
+    catch(error) {
+        console.error(error);
+        // 500 is Internal Server Error
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong while fetching profiles"
+        });        
+    }
+};
+
 // Export
-module.exports = {updateProfile, deleteProfile};
+module.exports = {updateProfile, deleteProfile, showUserDetails};

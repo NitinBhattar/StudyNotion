@@ -112,6 +112,15 @@ const resetPassword = async (req, res) => {
                                                                     resetPassTokenExp: undefined
                                                                 }, {new: true});
 
+        // MongoDB fail check
+        if(!updatedUser) {
+            // 400 is Bad request
+            return res.status(400).json({
+                success: false,
+                message: "Password reset failed, please try again later"
+            });            
+        }
+
         // 200 is OK
         return res.status(200).json({
             success: true,

@@ -26,7 +26,7 @@ const createSubSection = async (req, res) => {
             // 400 is Bad Request
             return res.status(400).json({
                 success: false,
-                message: "Section not found"
+                message: "Something went wrong, Section Id is missing"
             });
         }
 
@@ -193,7 +193,7 @@ const deleteSubSection = async (req, res) => {
         // Delete from Section
         const updatedSection = await SectionModel.findByIdAndUpdate(sectionId, {$pull: {subSections: subSectionDetails._id}}, {new: true});
 
-        // MongoDB fail
+        // MongoDB fail check
         if(!updatedSection) {
             // 404 is Not Found
             return res.status(404).json({

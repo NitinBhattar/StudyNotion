@@ -49,13 +49,24 @@ const courseSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "CategoryModel"
     },
+    tags: {
+        type: [String],
+        required: true
+    },
     // Array
     studentsEnrolled: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "UserModel"
         }    
-    ]
+    ],
+    instructions: {
+        type: [String]
+    },
+    status: {
+        type: String,
+        enum: ["Draft", "Published"]
+    }
 });
 
 // Export

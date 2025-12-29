@@ -14,13 +14,14 @@ const createCourse = async (req, res) => {
             courseDescription,
             whatYouWillLearn,
             price,
-            category
+            category,
+            tags
             } = req.body;
 
         const thumbnail = req?.files?.thumbnailImage;
 
         // Fields are missing
-        if(!courseName || !courseDescription || !whatYouWillLearn || !price || !category || !thumbnail) {
+        if(!courseName || !courseDescription || !whatYouWillLearn || price === undefined || !category || !thumbnail) {
             // 400 is Bad Request
             return res.status(400).json({
                 success: false,
@@ -72,14 +73,15 @@ const createCourse = async (req, res) => {
                 price: Number(price),
                 thumbnailUrl: thumbnailDetails.secure_url,
                 thumbnailId: thumbnailDetails.public_id,
-                category
+                category,
+                tags
             }
         );
 
         // Create course entry in category as well, $push / $addToSet(no duplicacy) and $pull for array in MongoDB
-        const updatedCategory = await CategoryModel.findByIdAndUpdate(category, {$push : {courses: newCourse._id}}, {new: true});
+        const updatedCategory = await CategoryModel.findByIdAndUpdate(category, {$addToSet : {courses: newCourse._id}}, {new: true});
 
-        // Mongo fail check
+        // MongoDB fail check
         if(!updatedCategory) {
             // 404 is Not Found
             return res.status(404).json({
@@ -91,7 +93,7 @@ const createCourse = async (req, res) => {
         // Create course entry in instructor as well
         const updatedUser = await UserModel.findByIdAndUpdate(userId, {$push : {courses: newCourse._id}}, {new: true});
 
-        // Mongo fail check
+        // MongoDB fail check
         if(!updatedUser) {
             // 404 is Not fFund
             return res.status(404).json({
@@ -117,6 +119,70 @@ const createCourse = async (req, res) => {
     }
 };
 
+// Get Course Details
+const getCourseDetails = async (req, res) => {
+    try {
+        // Fetching data
+        const {courseId} = req.body;
+
+        // Vaildation
+        if(!courseId) {
+            // 400 is Bad request
+            return res.status(400).json({
+                success: false,
+                message: "Course Id is missing"
+            });
+        }
+
+        const courseDetails = await CourseModel.findById(courseId)
+                                                .populate([
+                                                    {
+                                                        path: "instructor",
+                                                        select : "firstName lastName additionalDetails imageUrl",
+                                                        populate: {
+                                                            path: "additionalDetails"
+                                                        }
+                                                    },
+                                                    {
+                                                        path: "category"
+                                                    },
+                                                    {
+                                                        path: "courseContent",
+                                                        populate: {
+                                                            path: "subSections"
+                                                        }                                                        
+                                                    },
+                                                    {
+                                                        path: "ratingAndReview"
+                                                    }
+                                                ]).lean().exec();
+
+        // MongoDB fail check
+        if(!courseDetails) {
+            // 404 is Not Found
+            return res.status(404).json({
+                success: false,
+                message: "Course not found"
+            });            
+        }
+
+        // 200 is OK
+        return res.status(200).json({
+            success: true,
+            message: "Course fetched successfully",
+            data: courseDetails
+        });
+    }
+    catch(error) {
+        console.error(error);
+        // 500 is Internal Server Error
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong while fetching course"
+        });        
+    }
+};
+
 // Show all courses
 const showAllCourses = async (req, res) => {
     try {
@@ -129,8 +195,9 @@ const showAllCourses = async (req, res) => {
                                                         price: true,
                                                         thumbnailUrl: true,
                                                         studentsEnrolled: true
-                                                      }).populate("instructor", "firstName lastName")
-                                                        .exec();
+                                                      })
+                                                      .populate("instructor", "firstName lastName")
+                                                      .lean().exec();
 
         // 200 is OK
         return res.status(200).json({
@@ -150,4 +217,4 @@ const showAllCourses = async (req, res) => {
 };
 
 // Export
-module.exports = {createCourse, showAllCourses};
+module.exports = {createCourse, getCourseDetails, showAllCourses};
