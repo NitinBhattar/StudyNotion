@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const UserModel = require("../models/UserModel.js");
 const mailSender = require("../utils/mailSender.js");
+const resetPasswordTemplate = require("../templates/resetPasswordTemplate.js");
 
 // Reset Password Token
 const resetPasswordToken = async (req, res) => {
@@ -33,13 +34,22 @@ const resetPasswordToken = async (req, res) => {
                                                                     resetPassTokenExp: Date.now() + (5*60*1000)
                                                                 }, {new: true} );
 
+        // MongoDB fail check
+        if(!updatedUser) {
+            // 404 is Not Found
+            return res.status(404).json({
+                success: false,
+                messsage: "User not found"
+            });
+        }
+
         // Create link for reset password, Front-End URL @PORT = 3000
         const url = `https://localhost:3000/reset-password/${token}`;
 
         // Send mail
         await mailSender(email,
                         "Reset Password",
-                        `Password Reset Link: ${url}`);
+                        resetPasswordTemplate(url, updatedUser.firstName));
 
         // 200 is OK
         return res.status(200).json({
@@ -60,7 +70,7 @@ const resetPasswordToken = async (req, res) => {
 const resetPassword = async (req, res) => {
     try {
         // Fetching data, frontend will send token to body
-        const {password, confirmPassword, token} = req.body;
+        const {password, confirmPassword, token} = req.body || {};
 
         // Fields are missing
         if(!password || !confirmPassword) {

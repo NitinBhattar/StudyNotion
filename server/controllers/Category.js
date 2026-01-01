@@ -1,5 +1,6 @@
 // Import
 const CategoryModel = require("../models/CategoryModel.js");
+const CourseModel = require("../models/CourseModel.js");
 
 // Create Category
 const createCategory = async (req, res) => {

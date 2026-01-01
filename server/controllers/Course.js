@@ -2,6 +2,7 @@
 const CourseModel = require("../models/CourseModel.js");
 const CategoryModel = require("../models/CategoryModel.js");
 const UserModel = require("../models/UserModel.js");
+const sectionDeleteById = require("../services/sectionDeleteById.js")
 const cloudinaryUploader = require("../utils/cloudinaryUploader.js");
 require("dotenv").config();
 
@@ -183,8 +184,8 @@ const getCourseDetails = async (req, res) => {
     }
 };
 
-// Show all courses
-const showAllCourses = async (req, res) => {
+// Get all courses
+const getAllCourses = async (req, res) => {
     try {
         // Fetching data, getting only selected data i.e marked true
         // Instructor's only firstName and lastName will be taken not all details including password
@@ -216,5 +217,70 @@ const showAllCourses = async (req, res) => {
     }
 };
 
+// Delete Course
+const deleteCourse = async (req, res) => {
+    try {
+        // Fetch Data
+        const {courseId} = req.body;
+
+        // Validation
+        if(!courseId) {
+            // 400 is Bad Request
+            return res.status(400).json({
+                success: false,
+                message: "Course Id is missing"
+            });
+        }
+
+        // Fetching Details
+        const courseDetails = await CourseModel.findById(courseId);
+
+        // MongoDB fail check
+        if(!courseDetails) {
+            // 404 is Not Found
+            return res.status(404).json({
+                success: false,
+                message: "Course not found"
+            });
+        }
+
+        // Deleting all Sections, Promise will throw error in catch
+        await Promise.all(
+            courseDetails.courseContent.map(sectionId =>
+                sectionDeleteById(sectionId)
+            )
+        );
+
+        // Remove from Instructor
+        const instructorDetails = await UserModel.findByIdAndUpdate(courseDetails.instructor, {$pull: {courses: courseId}}, {new: true});
+
+        // MongoDB fail check
+        if(!instructorDetails) {
+            // 404 is Not Found
+            return res.status(404).json({
+                success: false,
+                message: "Instructor not found"
+            });
+        }
+
+        // Delete Course
+        await CourseModel.findByIdAndDelete(courseId);
+
+        // 200 is OK
+        return res.status(200).json({
+            success: true,
+            message: "Course deleted successfully"
+        });
+    }
+    catch(error) {
+        console.error(error);
+        // 500 is Internal Server Error
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong while deleting course"
+        });        
+    }
+};
+
 // Export
-module.exports = {createCourse, getCourseDetails, showAllCourses};
+module.exports = {createCourse, getCourseDetails, getAllCourses, deleteCourse};

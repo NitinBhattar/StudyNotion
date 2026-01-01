@@ -5,41 +5,30 @@ const otpGenerator = require("otp-generator");
 const UserModel = require("../models/UserModel.js");
 const ProfileModel = require("../models/ProfileModel.js");
 const OtpModel = require("../models/OtpModel.js");
-const mailSender = require("../utils/mailSender.js")
+const mailSender = require("../utils/mailSender.js");
+const otpVerificationTemplate = require("../templates/otpVerificationTemplate.js")
+const passwordUpdatedTemplate = require("../templates/passwordUpdatedTemplate.js");
 require("dotenv").config();
 
-const generateOtp = async () => {
-    let attempt = 0;
-    const maxAttempt = 5
-    let otp;
-    let unique = true;
-    
-    while(unique && attempt < maxAttempt) {
-        otp = otpGenerator.generate(6, {
-            upperCaseAlphabets: true,
-            lowerCaseAlphabets: false,
-            specialChars: false
-        });
+// Generate otp
+const generateotp = async () => {
+    const otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: true,
+        lowerCaseAlphabets: false,
+        specialChars: false,
+        digits: true
+    });
 
-        // Error
-        if(!otp || otp.length !== 6) {
-            throw new Error("Failed to generate otp.")
-        }
-        
-        unique = await OtpModel.findOne({otp});
-        attempt++;
-    }
-
-    // Last check after generation
-    if(unique) {
-        throw new Error("Failed to generate otp");
+    // Error
+    if(!otp || otp.length !== 6) {
+        throw new Error("Failed to generate otp")
     }
 
     return otp;
 };
 
 // Send otp
-const sendOtp = async(req, res) => {
+const sendotp = async(req, res) => {
     try {
         // Fetching data
         const {email} = req.body;
@@ -57,7 +46,10 @@ const sendOtp = async(req, res) => {
         }
 
         // Generate otp
-        const otp = await generateOtp();
+        const otp = await generateotp();
+
+        // Sending Mail
+        await mailSender(email, "Otp Verification Required", otpVerificationTemplate(otp));
 
         // Hash otp
         const hashedOtp = await bcrypt.hash(otp, 10);
@@ -226,7 +218,7 @@ const login = async (req, res) => {
         }
 
         // Check if user already exists, lean so that JWT could use it as normal object
-        const user = await UserModel.findOne({email}).lean();
+        const user = await UserModel.findOne({email}).populate("additionalDetails").lean();
 
         // User doesn't exist
         if(!user) {
@@ -286,7 +278,7 @@ const login = async (req, res) => {
 const changePassword = async (req, res) => {
     try {
         // Fetching data from cookie and body
-        const email = req.user.email;
+        const email = req?.user?.email;
         const {oldPassword, newPassword, confirmNewPassword} = req.body;
 
         // All fields are entered
@@ -319,6 +311,15 @@ const changePassword = async (req, res) => {
             });
         }
 
+        // Check if oldPassword & newPassword are same
+        if(oldPassword === newPassword) {
+            // 409 is Conflict
+            return res.status(409).json({
+                success: false,
+                message: "Old Password and New Password can't be same"
+            });
+        }
+
         // Check if newPassword & confirmNewPassword matches
         if(newPassword !== confirmNewPassword) {
             // 400 is Bad Request
@@ -343,7 +344,7 @@ const changePassword = async (req, res) => {
         }
 
         // Sending mail
-        mailSender(email, "Password changed", "Password updated successfully");
+        await mailSender(email, "Password changed successfully", passwordUpdatedTemplate(email, updatedUser.firstName));
 
         // 200 is OK
         return res.status(200).json({
@@ -362,4 +363,4 @@ const changePassword = async (req, res) => {
 };
 
 // Export
-module.exports = {sendOtp, signup, login, changePassword};
+module.exports = {sendotp, signup, login, changePassword};

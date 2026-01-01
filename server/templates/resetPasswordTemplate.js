@@ -1,10 +1,10 @@
-exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
-  return `<!DOCTYPE html>
+const resetPasswordTemplate = (url, name) => {
+	return `<!DOCTYPE html>
     <html>
     
     <head>
         <meta charset="UTF-8">
-        <title>Payment Confirmation</title>
+        <title>Password Update Confirmation</title>
         <style>
             body {
                 background-color: #ffffff;
@@ -40,18 +40,6 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
                 margin-bottom: 20px;
             }
     
-            .cta {
-                display: inline-block;
-                padding: 10px 20px;
-                background-color: #FFD60A;
-                color: #000000;
-                text-decoration: none;
-                border-radius: 5px;
-                font-size: 16px;
-                font-weight: bold;
-                margin-top: 20px;
-            }
-    
             .support {
                 font-size: 14px;
                 color: #999999;
@@ -67,19 +55,24 @@ exports.paymentSuccessEmail = (name, amount, orderId, paymentId) => {
     
     <body>
         <div class="container">
-            <a href="https://studynotion-edtech-project.vercel.app"><img class="logo" src="https://i.ibb.co/7Xyj3PC/logo.png"
-                    alt="StudyNotion Logo"></a>
-            <div class="message">Course Payment Confirmation</div>
+            <a href="https://studynotion-edtech-project.vercel.app"><img class="logo"
+                    src="https://drive.google.com/file/d/1kPeC3biaJ6siWyZgJyXwNQ83v03cXjC0/view?usp=drive_link" alt="StudyNotion Logo"></a>
+            <div class="message">Reset Password Link</div>
             <div class="body">
-                <p>Dear ${name},</p>
-                <p>We have received a payment of <span class='highlight'>₹${amount}</span></p>.
-                <p>Your Payment ID is <b>${paymentId}</b></p>
-                <p>Your Order ID is <b>${orderId}</b></p>
+                <p>Hey ${name},</p>
+                <p>To reset your password, click on the link: <span class="highlight">${url}</span>.
+                </p>
+                <p>If you did not request this password change, please contact us immediately to secure your account.</p>
             </div>
-            <div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
-                    href="mailto:info@studynotion.com">info@studynotion.com</a>. We are here to help!</div>
+            <div class="support">If you have any questions or need further assistance, please feel free to reach out to us
+                at
+                <a href="mailto:info@studynotion.com">info@studynotion.com</a>. We are here to help!
+            </div>
         </div>
     </body>
     
-    </html>`
-}
+    </html>`;
+};
+
+// Export
+module.exports = resetPasswordTemplate;

@@ -1,4 +1,5 @@
-const otpTemplate = (otp) => {
+// Template
+const otpVerificationTemplate = (otp) => {
 	return `<!DOCTYPE html>
 	<html>
 	
@@ -67,7 +68,7 @@ const otpTemplate = (otp) => {
 	<body>
 		<div class="container">
 			<a href="https://studynotion-edtech-project.vercel.app"><img class="logo"
-					src="https://i.ibb.co/7Xyj3PC/logo.png" alt="StudyNotion Logo"></a>
+					src="https://drive.google.com/file/d/1kPeC3biaJ6siWyZgJyXwNQ83v03cXjC0/view?usp=drive_link" alt="StudyNotion Logo"></a>
 			<div class="message">OTP Verification Email</div>
 			<div class="body">
 				<p>Dear User,</p>
@@ -84,4 +85,6 @@ const otpTemplate = (otp) => {
 	
 	</html>`;
 };
-module.exports = otpTemplate;
+
+// Export
+module.exports = otpVerificationTemplate;

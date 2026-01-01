@@ -2,17 +2,22 @@
 const UserModel = require("../models/UserModel.js");
 const ProfileModel = require("../models/ProfileModel.js");
 const CourseModel = require("../models/CourseModel.js");
-const courseDeleteById = require("../services/courseDeleteById.js")
+const cloudinaryUploader = require("../utils/cloudinaryUploader.js");
+const cloudinaryRemover = require("../utils/cloudinaryRemover.js");
+const courseDeleteById = require("../services/courseDeleteById.js");
+require("dotenv").config();
 
 // Update Profile
 const updateProfile = async (req, res) => {
     try {
         // Fetching data
-        const {dateOfBirth, about, gender, contact} = req.body;
+        // || {} means null if any of the fields are absent
+        const {dateOfBirth, about, gender, contact} = req.body || {};
+        const pfp = req?.files?.profileImage;
         const userId = req.user.id;
 
         // Fields are missing
-        if(!dateOfBirth && !about && !gender && !contact) {
+        if(!dateOfBirth && !about && !gender && !contact && !pfp) {
             // 400 is Bad Request
             return res.status(400).json({
                 success: false,
@@ -44,7 +49,7 @@ const updateProfile = async (req, res) => {
         // Fetching profile details
         const profileDetails = await ProfileModel.findById(userDetails.additionalDetails);
 
-        // Profile details not found
+        // MongoDB fail check
         if(!profileDetails) {
             // 404 is Not Found
             return res.status(404).json({
@@ -65,6 +70,20 @@ const updateProfile = async (req, res) => {
         }
         if(contact) {
             profileDetails.contact = contact;
+        }
+        if(pfp) {
+            // Remove old pfp
+            if(pfpDetails.public_id) {
+                await cloudinaryRemover(pfpDetails.public_id, "image");
+            }
+            
+            // Uplaod image to Cloudinary
+            const pfpDetails = await cloudinaryUploader(pfp, process.env.CLOUDINARY_USER_PROFILE, 80);
+            userDetails.imageUrl = pfpDetails.secure_url;
+            userDetails.imageId = pfpDetails.public_id;
+
+            // Save in DB
+            await userDetails.save();
         }
 
         // Save in DB

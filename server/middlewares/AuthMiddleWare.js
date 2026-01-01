@@ -12,7 +12,7 @@ const authMiddleware = async (req, res, next) => {
         const authHeader = req.header("Authorization");
         // Optional chaining will not let it execute if the objecy is undefined
         const token = ( authHeader?.startsWith("Bearer ") ) ? ( authHeader?.replace("Bearer ", "") ) :
-                        req.cookies?.token || req.body?.token;
+                        req?.cookies?.token || req?.body?.token;
 
 
         // Token is missing
@@ -23,12 +23,14 @@ const authMiddleware = async (req, res, next) => {
             });
         }
 
+
         // Verify token, decrypt rest of things given in token, user's id, email, accountType
         try {
             const decode = await jwt.verify(token, process.env.JWT_SECRET);
             req.user = decode;
         }
         catch(error) {
+            console.error(error);
             // 401 is Unauthorized
             return res.status(401).json({
                 success: false,
@@ -39,6 +41,7 @@ const authMiddleware = async (req, res, next) => {
         next();
     }
     catch(error) {
+        console.error(error);
         // 500 is Internal Server Error
         return res.status(500).json({
             success: false,
@@ -47,7 +50,7 @@ const authMiddleware = async (req, res, next) => {
     }
 };
 
-// Students route
+// Authenitication
 const AuthStudent = async(req, res, next) => {
     try {
         // Fetching data
@@ -105,7 +108,7 @@ const AuthAdmin = async(req, res, next) => {
             // 403 is forbidden
             return res.status(403).json({
                 success: false,
-                message: "Admmin access required"
+                message: "Admin access required"
             });
         }
 

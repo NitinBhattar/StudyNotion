@@ -4,7 +4,7 @@ const instance = require("../config/RazorpayConnect.js");
 const CourseModel = require("../models/CourseModel.js");
 const UserModel = require("../models/UserModel.js");
 const mailSender = require("../utils/mailSender.js");
-const courseEnrollmentEmail = require("../templates/courseEnrollmentEmail.js");
+const courseEnrollmentTemplate = require("../templates/courseEnrollmentTemplate.js");
 require("dotenv").config();
 
 // Initiate Razorpay order & Capture payment
@@ -173,7 +173,7 @@ const verifyPayment = async (req, res) => {
         // Send enrollment mail
         await mailSender(updatedUser.email,
                         `Congratulations, you have successfully enrolled in the ${updatedCourse.courseName}`,
-                        courseEnrollmentEmail(updatedCourse.courseName, updatedUser.firstName));
+                        courseEnrollmentTemplate(updatedCourse.courseName, updatedUser.firstName));
 
         // 200 is OK
         return res.status(200).json({

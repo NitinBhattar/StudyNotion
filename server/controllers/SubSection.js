@@ -3,7 +3,6 @@ const SectionModel = require("../models/SectionModel.js");
 const SubSectionModel = require("../models/SubSectionModel.js");
 const cloudinaryUploader = require("../utils/cloudinaryUploader.js");
 const cloudinaryRemover = require("../utils/cloudinaryRemover.js");
-const subSectionDeleteById = require("../services/subSectionDeleteById.js")
 
 // Create SubSection
 const createSubSection = async (req, res) => {
@@ -184,7 +183,7 @@ const deleteSubSection = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 message: "Subsection not found"
-            });            
+            });      
         }
 
         // Cloudinary delete

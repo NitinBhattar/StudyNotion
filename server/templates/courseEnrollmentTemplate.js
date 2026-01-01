@@ -1,4 +1,4 @@
-exports.courseEnrollmentEmail = (courseName, name) => {
+const courseEnrollmentTemplate = (courseName, name) => {
   return `<!DOCTYPE html>
   <html>
   
@@ -67,7 +67,7 @@ exports.courseEnrollmentEmail = (courseName, name) => {
   
   <body>
       <div class="container">
-          <a href="https://studynotion-edtech-project.vercel.app"><img class="logo" src="https://i.ibb.co/7Xyj3PC/logo.png"
+          <a href="https://studynotion-edtech-project.vercel.app"><img class="logo" src="https://drive.google.com/file/d/1kPeC3biaJ6siWyZgJyXwNQ83v03cXjC0/view?usp=drive_link"
                   alt="StudyNotion Logo"></a>
           <div class="message">Course Registration Confirmation</div>
           <div class="body">
@@ -85,3 +85,6 @@ exports.courseEnrollmentEmail = (courseName, name) => {
   
   </html>`;
 };
+
+// Export
+module.exports = courseEnrollmentTemplate;

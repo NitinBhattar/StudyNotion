@@ -158,7 +158,7 @@ const getAverageRating = async (req, res) => {
 };
 
 // Get all Reviews for a course
-const getAllReviewsForCourse = async (req, res) => {
+const getCourseReviews = async (req, res) => {
     try {
         // Fetching courseId
         const courseId = req.body.courseId;
@@ -238,4 +238,4 @@ const getAllReviews = async (req, res) => {
 };
 
 // Export
-module.exports = {createRating, getAverageRating, getAllReviewsForCourse, getAllReviews};
+module.exports = {createRating, getAverageRating, getCourseReviews, getAllReviews};
