@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dev": "concurrently -n \"client, server\" -c \"bgBlue, bgYellow\" \"npm start\" \"npm run server\""
+    "dev": "concurrently -n \"client,server\" -c \"bgBlue,bgYellow\" \"npm start\" \"npm run server\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
