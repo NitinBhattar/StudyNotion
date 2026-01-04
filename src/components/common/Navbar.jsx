@@ -20,10 +20,13 @@ import logo from "../../assets/Logo/Logo-Full-Light.png";
 const Navbar = () => {
     // From slices
     const {token} = useSelector( (state) => state.auth );
+    // Other way
+    // const token = useSelector( (state) => state.auth.token );
+
     const {user} = useSelector( (state) => state.profile );
     const {totalItems} = useSelector( (state) => state.cart );
 
-    // React
+    const location = useLocation();
     const [subLinks, setSubLinks] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -41,8 +44,6 @@ const Navbar = () => {
         fetchSubLinks();
     }, []);
 
-    // Router-Dom
-    const location = useLocation();
     // For word match, path is path before last "/"
     const matchRoute = (route) => {
         return matchPath({ path:route}, location.pathname )
@@ -80,7 +81,7 @@ const Navbar = () => {
 
                                                     <BsChevronDown />
 
-                                                    <div className="invisible absolute left-[50%] top-[50%] z-10 flex w-[200px] translate-x-[-50%] translate-y-[3em] flex-col rounded-lg bg-richblack-5 p-4 text-richblack-900 opacity-0 transition-all duration-150 group-hover:visible group-hover:translate-y-[1.65em] group-hover:opacity-100 lg:w-[300px]">
+                                                    <div className="invisible absolute left-[50%] top-[50%] z-10 flex w-[200px] translate-x-[-50%] translate-y-[3em] flex-col rounded-lg bg-richblack-5 p-4 text-richblack-900 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-y-[1.65em] group-hover:opacity-100 lg:w-[300px]">
                                                         <div className="absolute left-[50%] top-0 -z-10 h-6 w-6 translate-x-[80%] translate-y-[-40%] rotate-45 select-none rounded bg-richblack-5"></div>
                                                         {loading 
                                                         ? ( <p className="text-center">Loading...</p>)

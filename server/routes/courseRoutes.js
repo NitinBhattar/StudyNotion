@@ -87,4 +87,4 @@ router.get("/getCategoryPageDetails", categoryPageDetails);
 router.get("/showAllCategories", showAllCategories);
 
 // Export
-module.exports = router
+module.exports = router;

@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const UserModel = require("../models/UserModel.js");
 const mailSender = require("../utils/mailSender.js");
 const resetPasswordTemplate = require("../templates/resetPasswordTemplate.js");
+require("dotenv").config();
 
 // Reset Password Token
 const resetPasswordToken = async (req, res) => {
@@ -43,13 +44,13 @@ const resetPasswordToken = async (req, res) => {
             });
         }
 
-        // Create link for reset password, Front-End URL @PORT = 3000
-        const url = `https://localhost:3000/reset-password/${token}`;
+        // Create link for reset password, Front-End updatePasswordURL @PORT = 3000
+        const updatePasswordURL = process.env.FE_UPDATE_PASSWORD_URL + `/${token}`;
 
         // Send mail
         await mailSender(email,
                         "Reset Password",
-                        resetPasswordTemplate(url, updatedUser.firstName));
+                        resetPasswordTemplate(updatePasswordURL, updatedUser.firstName));
 
         // 200 is OK
         return res.status(200).json({

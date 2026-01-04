@@ -2,8 +2,6 @@
 // Modules
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa6";
-
-// Components
 import HighlightText from "../components/core/HomePage/HighlightText.jsx";
 import CTAButton from "../components/core/HomePage/CTAButton.jsx";
 import CodeBlocks from "../components/core/HomePage/CodeBlocks.jsx";
@@ -11,6 +9,7 @@ import ExploreMore from "../components/core/HomePage/ExploreMore.jsx";
 import TimelineSection from "../components/core/HomePage/TimelineSection.jsx";
 import LearningLanguageSection from "../components/core/HomePage/LearningLanguageSection.jsx";
 import InstructionSection from "../components/core/HomePage/InstructionSection.jsx";
+// import ReviewSlider from "../components/Common/ReviewSlider.jsx";
 import Footer from "../components/common/Footer.jsx";
 
 // Assets
@@ -199,9 +198,7 @@ const Home = () => {
                     Review from other learners
                 </h2>
 
-                <div className= "">
-                    
-                </div>
+                {/* <ReviewSlider /> */}
             </div>
                     
             {/* Section4 */}

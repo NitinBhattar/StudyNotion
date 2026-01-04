@@ -13,9 +13,10 @@ const PORT = process.env.PORT || 4000;
 
 // Routes
 const userRoutes = require("./routes/userRoutes.js");
-const profileRoutes = require("./routes/profileRoutes.js");
-const paymentRoutes = require("./routes/paymentRoutes.js");
+const contactRoutes = require("./routes/contactRoutes.js");
 const courseRoutes = require("./routes/courseRoutes.js");
+const paymentRoutes = require("./routes/paymentRoutes.js");
+const profileRoutes = require("./routes/profileRoutes.js");
 
 // MiddleWares
 app.use(express.json());
@@ -45,6 +46,7 @@ app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/courses", courseRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/profile", profileRoutes);
+app.use("/api/v1/reach", contactRoutes);
 
 // Start Server
 app.listen(PORT, () => {

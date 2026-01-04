@@ -14,4 +14,4 @@ router.put("/updateProfile", authMiddleware, updateProfile);
 router.delete("/deleteProfile", authMiddleware, deleteProfile);
 
 // Export
-module.exports = router
+module.exports = router;

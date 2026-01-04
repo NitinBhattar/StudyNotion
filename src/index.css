@@ -170,12 +170,32 @@ details > summary::-webkit-details-marker {
 
 /* https://10015.io/tools/css-loader-generator */
 .spinner {
-    width: 56px;
-    height: 56px;
+    width: 67.2px;
+    height: 28px;
+    border: 2.2px solid #474bff;
     border-radius: 50%;
-    border: 9px solid #f1f2ff;
-    animation: spinner-bulqg1 0.8s infinite linear alternate,
-        spinner-oaa3wk 1.6s infinite linear;
+    display: grid;
+    animation: spinner-ds34hk 2s infinite linear;
+}
+
+.spinner:before,
+.spinner:after {
+    content: "";
+    grid-area: 1/1;
+    border: inherit;
+    border-radius: 50%;
+    animation: inherit;
+    animation-duration: 3s;
+}
+
+.spinner:after {
+    --s: -1;
+}
+
+@keyframes spinner-ds34hk {
+    100% {
+        transform: rotate(calc(var(--s,1)*1turn));
+    }
 }
 
 .codeblock1 {
