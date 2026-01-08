@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { setLoading, setToken } from "../../slices/authSlice.js";
 import { setUser } from "../../slices/profileSlice.js";
 import { resetCart } from "../../slices/cartSlice.js";
-import apiConnector from "../apiConnector";
+import apiConnector from "../apiConnector.js";
 import { authEndpoints } from "../apis.js";
 
 const {
@@ -41,7 +41,7 @@ const sendotp = (email, navigate) => {
         }
 
         // Loading screen off
-        dispatch(setLoading(false))
+        dispatch(setLoading(false));
         toast.dismiss(toastId);
     }
 };
@@ -92,6 +92,7 @@ const signup = (
     }
 };
 
+// Returns user
 const login = (email, password, navigate) => {
     return async (dispatch) => {
         // Loading screen on
@@ -110,7 +111,6 @@ const login = (email, password, navigate) => {
             }
 
             toast.success("Login successful!");
-            dispatch(setToken(response.data.user.token));
 
             // If user has set an image, display that, otherwise we use default from DiceBear
             const userImage = response.data?.user?.imageUrl
@@ -118,6 +118,7 @@ const login = (email, password, navigate) => {
                             : `https://api.dicebear.com/9.x/pixel-art/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`;
 
             dispatch(setUser({ ...response.data.user, image: userImage }));
+            dispatch(setToken(response.data.user.token));
 
             // Save in local storage and re-route
             localStorage.setItem("token", JSON.stringify(response.data.user.token));

@@ -9,7 +9,7 @@ import ExploreMore from "../components/core/HomePage/ExploreMore.jsx";
 import TimelineSection from "../components/core/HomePage/TimelineSection.jsx";
 import LearningLanguageSection from "../components/core/HomePage/LearningLanguageSection.jsx";
 import InstructionSection from "../components/core/HomePage/InstructionSection.jsx";
-// import ReviewSlider from "../components/Common/ReviewSlider.jsx";
+import ReviewSlider from "../components/common/ReviewSlider.jsx";
 import Footer from "../components/common/Footer.jsx";
 
 // Assets
@@ -198,7 +198,7 @@ const Home = () => {
                     Review from other learners
                 </h2>
 
-                {/* <ReviewSlider /> */}
+                <ReviewSlider />
             </div>
                     
             {/* Section4 */}

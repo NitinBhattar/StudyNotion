@@ -5,7 +5,8 @@ const router = express.Router();
 // Controllers
 const {
     capturePayment,
-    verifyPayment
+    verifyPayment,
+    sendPaymentSuccessEmail
 } = require("../controllers/Payments.js");
 
 // Middleswares
@@ -16,12 +17,8 @@ const {
 
 // Routes
 router.post("/capturePayment", authMiddleware, AuthStudent, capturePayment);
-// Razorpay webhook, express.json() breaks webhook, and not to use middleware, its from RazorPay's side
-router.post(
-  "/verifyPayment",
-  express.raw({ type: "application/json" }),
-  verifyPayment
-);
+router.post("/verifyPayment", authMiddleware, AuthStudent, verifyPayment);
+router.post("/sendPaymentSuccessEmail", authMiddleware, AuthStudent, sendPaymentSuccessEmail);
 
 // Export
 module.exports = router;

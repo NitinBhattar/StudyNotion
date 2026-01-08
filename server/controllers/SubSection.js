@@ -8,11 +8,11 @@ const cloudinaryRemover = require("../utils/cloudinaryRemover.js");
 const createSubSection = async (req, res) => {
     try {
         // Fetching data & files
-        const {title, timeDuration, description, sectionId} = req.body;
-        const video = req?.files?.videoFile;
+        const {title, description, sectionId} = req.body;
+        const video = req?.files?.video;
 
         // Fields are missing
-        if(!title || !timeDuration || !description || !video) {
+        if(!title || !description || !video) {
             // 400 is Bad Request
             return res.status(400).json({
                 success: false,
@@ -46,17 +46,18 @@ const createSubSection = async (req, res) => {
         // Create & Update in DB
         const SubSectionDetails = await SubSectionModel.create({
                                                                 title,
-                                                                timeDuration,
+                                                                timeDuration: `${videoDetails.duration}`,
                                                                 description,
                                                                 videoUrl: videoDetails.secure_url,
                                                                 videoId: videoDetails.public_id
                                                                 });
+                                                                
         const updatedSection = await SectionModel.findByIdAndUpdate(
-                                                                        sectionId,
-                                                                        {$addToSet: {subSections: SubSectionDetails._id}},
-                                                                        {new: true}
+                                                                    sectionId,
+                                                                    {$addToSet: {subSections: SubSectionDetails._id}},
+                                                                    {new: true}
                                                                     )
-                                                                    .populate("subSections").exec();
+                                                                    .populate("subSections").lean().exec();
 
         // Mongo fail check
         if(!updatedSection) {
@@ -71,7 +72,7 @@ const createSubSection = async (req, res) => {
         return res.status(201).json({
             success: true,
             message: "Subsection created successfully",
-            data: updatedSection
+            section: updatedSection
         });
     }
     catch(error) {
@@ -88,11 +89,11 @@ const createSubSection = async (req, res) => {
 const updateSubSection = async (req, res) => {
     try {
         // Fetching data & files
-        const {title, timeDuration, description, subSectionId} = req.body;
+        const {title, description, subSectionId, sectionId} = req.body;
         const video = req?.files?.videoFile;
 
         // Fields are missing
-        if(!title && !timeDuration && !description && !video) {
+        if(!title && !description && !video) {
             // 400 is Bad Request
             return res.status(400).json({
                 success: false,
@@ -124,9 +125,6 @@ const updateSubSection = async (req, res) => {
         if(title) {
             subSection.title = title;
         }
-        if(timeDuration) {
-            subSection.timeDuration = timeDuration;
-        }
         if(description) {
             subSection.description = description;
         }
@@ -136,17 +134,30 @@ const updateSubSection = async (req, res) => {
 
             // Upload new video
             const videoDetails = await cloudinaryUploader(video, process.env.CLOUDINARY_COURSE_VIDEO_FOLDER);
+            subSection.timeDuration = videoDetails.duration;
             subSection.videoUrl = videoDetails.secure_url;
             subSection.videoId = videoDetails.public_id;
         }
 
         // Goes to catch if failed
         await subSection.save();
+
+        const updatedSection = await SectionModel.findById(sectionId).populate("subSections").lean().exec();
+
+        // Mongo fail check
+        if(!updatedSection) {
+            // 404 is course not found
+            return res.status(404).json({
+                success: false,
+                message: "Section not found"
+            });
+        }
                                                                     
         // 200 is OK
         return res.status(200).json({
             success: true,
             message: "Subsection updated successfully",
+            section: updatedSection
         });
     }
     catch(error) {
@@ -207,7 +218,8 @@ const deleteSubSection = async (req, res) => {
         // 200 is OK
         return res.status(200).json({
             success: true,
-            message: "Subsection deleted successfully"
+            message: "Subsection deleted successfully",
+            section: updatedSection
         });
     }
     catch(error) {

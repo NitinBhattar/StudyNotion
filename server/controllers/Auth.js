@@ -239,7 +239,7 @@ const login = async (req, res) => {
             // Create token
             const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '2h'});
 
-            // Adding token to user object (via lean) & removing password for security purpose
+            // Adding token to user object (via lean) & remove password
             user.token = token;
             delete user.password;
 
@@ -252,8 +252,8 @@ const login = async (req, res) => {
 
             res.cookie("token", token, options).status(200).json({
                 success: true,
-                user,
-                message: "Login successfully"
+                message: "Login successfully",
+                user
             });
         }
         else {
@@ -279,10 +279,10 @@ const changePassword = async (req, res) => {
     try {
         // Fetching data from cookie and body
         const email = req?.user?.email;
-        const {oldPassword, newPassword, confirmNewPassword} = req.body;
+        const {oldPassword, newPassword} = req.body;
 
         // All fields are entered
-        if(!oldPassword || !newPassword || !confirmNewPassword) {
+        if(!oldPassword || !newPassword) {
             // 400 is Bad Request
             return res.status(400).json({
                 success: false,
@@ -317,15 +317,6 @@ const changePassword = async (req, res) => {
             return res.status(409).json({
                 success: false,
                 message: "Old Password and New Password can't be same"
-            });
-        }
-
-        // Check if newPassword & confirmNewPassword matches
-        if(newPassword !== confirmNewPassword) {
-            // 400 is Bad Request
-            return res.status(400).json({
-                success: false,
-                message: "New password and confirm password do not match. Please try again."
             });
         }
 

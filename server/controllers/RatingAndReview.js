@@ -1,7 +1,6 @@
 // Import
 const mongoose = require("mongoose");
 const RatingAndReviewModel = require("../models/RatingAndReviewModel.js");
-const UserModel = require("../models/UserModel.js");
 const CourseModel = require("../models/CourseModel.js");
 
 // Create Rating
@@ -158,52 +157,6 @@ const getAverageRating = async (req, res) => {
 };
 
 // Get all Reviews for a course
-const getCourseReviews = async (req, res) => {
-    try {
-        // Fetching courseId
-        const courseId = req.body.courseId;
-
-        // Validation
-        if(!courseId) {
-            // 400 is Bad Request
-            return res.status(400).json({
-                success: false,
-                message: "Course Id is missing"
-            });            
-        }        
-
-        const courseReviews = await RatingAndReviewModel.find({course: courseId})
-                                                     .sort({rating: "desc"})
-                                                     .populate([
-                                                        {
-                                                            path: "user",
-                                                            select: "firstName lastName imageUrl"
-                                                        },
-                                                        {
-                                                            path: "course",
-                                                            select: "courseName"
-                                                        }
-                                                     ])
-                                                     .lean().exec();
-
-        // 200 is OK
-        return res.status(200).json({
-            success: true,
-            message: "All reviews for course fetched successfully",
-            data: courseReviews
-        });
-    }
-    catch(error) {
-        console.error(error);
-        // 500 is Internal Server Error
-        return res.status(500).json({
-            success: false,
-            message: "Failed to fetch all reviews for the course"
-        });
-    }
-};
-
-// Get all Reviews for a course
 const getAllReviews = async (req, res) => {
     try {
         const allReviews = await RatingAndReviewModel.find({})
@@ -238,4 +191,4 @@ const getAllReviews = async (req, res) => {
 };
 
 // Export
-module.exports = {createRating, getAverageRating, getCourseReviews, getAllReviews};
+module.exports = {createRating, getAverageRating, getAllReviews};

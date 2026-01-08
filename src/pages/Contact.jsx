@@ -1,7 +1,7 @@
 // Import
 import ContactDetails from "../components/core/ContactUsPage/ContactDetails.jsx"
 import ContactForm from "../components/core/ContactUsPage/ContactForm.jsx"
-// import ReviewSlider from "../components/Common/ReviewSlider.jsx"
+import ReviewSlider from "../components/common/ReviewSlider.jsx"
 import Footer from "../components/common/Footer.jsx"
 
 const Contact = () => {
@@ -25,7 +25,7 @@ const Contact = () => {
                     Reviews from other learners
                 </h2>
 
-                {/* <ReviewSlider /> */}
+                <ReviewSlider />
             </div>
 
             {/* Footer */}

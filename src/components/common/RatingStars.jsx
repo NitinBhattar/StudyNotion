@@ -1,0 +1,45 @@
+// Import
+import { useEffect, useState } from "react";
+import { TiStarFullOutline, TiStarHalfOutline, TiStarOutline } from "react-icons/ti";
+
+const RatingStars = ({ Review_Count, Star_Size }) => {
+    const [starCount, SetStarCount] = useState({
+        full: 0,
+        half: 0,
+        empty: 0
+    });
+
+  useEffect(() => {
+    // 4.5 -> 4
+    const wholeStars = Math.floor(Review_Count) || 0;
+
+    SetStarCount({
+        full: wholeStars,
+        half: Number.isInteger(Review_Count) ? 0 : 1,
+        empty: Number.isInteger(Review_Count) ? 5 - wholeStars : 4 - wholeStars,
+    });
+    }, [Review_Count]);
+
+    return (
+        <div className= "flex gap-1 text-yellow-100">
+            {
+                [...new Array(starCount.full)].map((_, index) => {
+                    return <TiStarFullOutline key={index} size={Star_Size || 20} />
+                })
+            }
+            {
+                [...new Array(starCount.half)].map((_, index) => {
+                    return <TiStarHalfOutline key={index} size={Star_Size || 20} />
+                })
+            }
+            {
+                [...new Array(starCount.empty)].map((_, index) => {
+                    return <TiStarOutline key={index} size={Star_Size || 20} />
+                })
+            }
+        </div>
+    )
+};
+
+// Export
+export default RatingStars;

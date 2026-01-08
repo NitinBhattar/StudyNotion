@@ -1,6 +1,5 @@
 // Import
 const CategoryModel = require("../models/CategoryModel.js");
-const CourseModel = require("../models/CourseModel.js");
 
 // Create Category
 const createCategory = async (req, res) => {
@@ -64,12 +63,17 @@ const categoryPageDetails = async (req, res) => {
         }
 
         // Get courses for specific categoryIds
-        const categoryCourses = await CategoryModel.findById(categoryId)
-                                                  .populate("courses")
-                                                  .lean().exec();
+        const selectedCategory = await CategoryModel.findById(categoryId)
+                                                    .populate({
+                                                        path: "courses",
+                                                        match: { status: "Published" },
+                                                        populate: [ { path: "ratingAndReview"},
+                                                                    { path: "instructor", select: "firstName lastName imageUrl" }]
+                                                    })
+                                                    .lean().exec();
 
         // MongoDB fail check
-        if(!categoryCourses) {
+        if(!selectedCategory || selectedCategory.courses.length === 0) {
             // 404 is Not Found
             return res.status(404).json({
                 success: false,
@@ -78,25 +82,36 @@ const categoryPageDetails = async (req, res) => {
         }
 
         // Get courses for other categoryIds, $ne is not equal, No MongoDB check for find, return an array
-        const differentCourses = await CategoryModel.find({_id: {$ne: categoryId}})
-                                                  .populate("courses")
-                                                  .lean().exec();
+        const differentCategories = await CategoryModel.find({_id: {$ne: categoryId}})
+                                                       .populate({
+                                                           path: "courses",
+                                                           match: { status: "Published" },
+                                                           populate: [ { path: "ratingAndReview"},
+                                                                       { path: "instructor", select: "firstName lastName imageUrl" }]
+                                                       })
+                                                       .lean().exec();
 
         // Get top selling courses, sort it according to most students enrolled
-        // limit(10) assures only 10 courses are fetched as we dont need all of them
-        const topSellingCourses = await CourseModel.find({})
-                                                   .sort({ studentsEnrolled: -1 })
-                                                   .limit(10)
-                                                   .lean();
+        const allCategories = await CategoryModel.find({})
+                                                 .populate({
+                                                    path: "courses",
+                                                    match: { status: "Published" },
+                                                   populate: [ { path: "ratingAndReview"},
+                                                               { path: "instructor", select: "firstName lastName imageUrl" }]
+                                                 })
+                                                 .lean().exec();
 
+        const allCourses = allCategories.flatMap((category) => category.courses);
+        // Based on no. of enrollments and will only give top 10 courses
+        const topSellingCourses = allCourses.sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length);
 
         // 200 is OK
         return res.status(200).json({
             success: true,
             message: "Fetched details for category page",
             data: {
-                categoryCourses,
-                differentCourses,
+                selectedCategory,
+                differentCategories,
                 topSellingCourses
             }
         });
@@ -115,13 +130,13 @@ const categoryPageDetails = async (req, res) => {
 const showAllCategories = async (req, res) => {
     try {
         // Fetch categories, getting only selected data i.e marked true
-        const allCategories = await CategoryModel.find({}, {name: true, description: true});
+        const allCategories = await CategoryModel.find();
 
         // 200 is OK
         return res.status(200).json({
             success: true,
             message: "All categories fetched successfully",
-            data: allCategories
+            allCategories
         });
     }
     catch(error) {

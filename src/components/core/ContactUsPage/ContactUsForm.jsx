@@ -163,7 +163,8 @@ const ContactUsForm = () => {
 
                 {errors.phoneNo && (
                                     <span className= "-mt-1 text-[12px] text-yellow-100">
-                                        Please enter your Phone Number
+                                        {/* Min, Max or Empty errors */}
+                                        {errors.phoneNo.message}
                                     </span>
                                    )
                 }
@@ -197,7 +198,7 @@ const ContactUsForm = () => {
                 type= "submit"
                 className= {`rounded-md bg-yellow-50 px-6 py-3 text-center text-[13px] font-bold text-black
                             shadow-[2px_2px_0px_0px_rgba(255,255,255,0.18)] disabled:bg-richblack-500 sm:text-[16px]
-                ${!loading &&"transition-all duration-200 hover:scale-95 hover:shadow-none"}`}
+                            ${!loading && "transition-all duration-200 hover:scale-95 hover:shadow-none"}`}
             >
                 Send Message
             </button>            

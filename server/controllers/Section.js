@@ -66,7 +66,7 @@ const createSection = async (req, res) => {
         return res.status(201).json({
             success: true,
             message: "Section created successfully",
-            data: updatedCourse
+            course: updatedCourse
         });
     }
     catch(error) {
@@ -83,7 +83,7 @@ const createSection = async (req, res) => {
 const updateSection = async (req, res) => {
     try {
         // Fetching data
-        const {sectionName, sectionId} = req.body;
+        const {sectionName, sectionId, courseId} = req.body;
 
         // Fields are missing
         if(!sectionName) {
@@ -112,13 +112,32 @@ const updateSection = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 message: "Section not found"
-            });            
+            });
+        }
+
+        // Fetch updated course details
+        const updatedCourse = await CourseModel.findById(courseId).populate({
+                                                                    // Populate this path
+                                                                    path: "courseContent",
+                                                                    // Another nested populate query
+                                                                    populate: {path: "subSections"}
+                                                                  })
+                                                                  .exec();;
+
+        // MongoDB fail check
+        if(!updatedCourse) {
+            // 404 is course not found
+            return res.status(404).json({
+                success: false,
+                message: "Course not found"
+            });
         }
                                                                     
         // 200 is OK
         return res.status(200).json({
             success: true,
-            message: "Section updated successfully"
+            message: "Section updated successfully",
+            course: updatedCourse
         });
     }
     catch(error) {
@@ -166,7 +185,13 @@ const deleteSection = async (req, res) => {
         );
 
         // Delete from course
-        const updatedCourse = await CourseModel.findByIdAndUpdate(courseId, {$pull: {courseContent: sectionDetails._id}}, {new: true});
+        const updatedCourse = await CourseModel.findByIdAndUpdate(courseId, {$pull: {courseContent: sectionDetails._id}}, {new: true}).populate({
+                                                                                                                                        // Populate this path
+                                                                                                                                        path: "courseContent",
+                                                                                                                                        // Another nested populate query
+                                                                                                                                        populate: {path: "subSections"}
+                                                                                                                                      })
+                                                                                                                                      .exec();;
 
         // MongoDB fail check
         if(!updatedCourse) {
@@ -183,7 +208,8 @@ const deleteSection = async (req, res) => {
         // 200 is OK
         return res.status(200).json({
             success: true,
-            message: "Section deleted successfully"
+            message: "Section deleted successfully",
+            course: updatedCourse
         });
     }
     catch(error) {

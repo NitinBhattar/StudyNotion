@@ -2,6 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
 
+// Initial state
 const initialState = {
     // After closing the browser, totalItems stays in local storage
     cart: localStorage.getItem("cart")
@@ -17,6 +18,7 @@ const initialState = {
         : 0
 };
 
+// Slice
 const cartSlice = createSlice({
     name: "cart",
     initialState: initialState,

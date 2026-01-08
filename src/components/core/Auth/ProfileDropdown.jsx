@@ -47,21 +47,21 @@ const ProfileDropdown = () => {
                         >   
                             {/* DashBoard */}
                             <Link to= {"/dashboard/my-profile"} onClick={() => setOpen(false)}>
-                                <div className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
-                                    <VscDashboard className="text-lg" />
+                                <div className= "flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25">
+                                    <VscDashboard className= "text-lg" />
                                     Dashboard
                                 </div>
                             </Link>
 
                             {/* Logout */}
                             <div
-                                onClick={() => {
+                                onClick= {() => {
                                     dispatch(logout(navigate))
                                     setOpen(false)
-                                    }}
-                                className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
+                                }}
+                                className= "flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
                             >
-                                <VscSignOut className="text-lg" />
+                                <VscSignOut className= "text-lg" />
                                 Logout
                             </div>
                         </div>

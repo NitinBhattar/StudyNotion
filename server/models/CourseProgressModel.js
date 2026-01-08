@@ -6,6 +6,10 @@ const courseProgressSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "CourseModel"
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "UserModel"
+    },
     // Array
     completedVideos: [
         {
