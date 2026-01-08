@@ -29,6 +29,7 @@ const Navbar = () => {
     const location = useLocation();
     const [subLinks, setSubLinks] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const fetchSubLinks = async () => {
         try {
@@ -126,6 +127,74 @@ const Navbar = () => {
                     </div>
                 </nav>
 
+                {
+                    mobileMenuOpen && 
+                    (
+                        <div className= "absolute top-14 right-0 w-30 bg-richblack-800 border border-richblack-700 rounded-md md:hidden z-50">
+                            <div className= "flex flex-col gap-3 p-4 text-richblack-25">
+                                {/* Cart */}
+                                {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
+                                    <Link
+                                        to= {"/dashboard/cart"}
+                                        onClick= {() => setMobileMenuOpen(false)}
+                                        className= "flex items-center gap-2"
+                                    >
+                                        <AiOutlineShoppingCart className= "text-xl" />
+                                        Cart ({totalItems})
+                                    </Link>
+                                )}
+
+                                {/* Logged out */}
+                                {token === null && (
+                                    <div className="flex flex-col gap-2">
+                                    <Link
+                                        to="/login"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="
+                                        inline-flex items-center justify-center
+                                        px-4 py-1.5
+                                        rounded-md
+                                        border border-richblack-600
+                                        text-sm
+                                        transition-all duration-200
+                                        hover:bg-richblack-700 hover:text-yellow-25
+                                        "
+                                    >
+                                        Log In
+                                    </Link>
+
+                                    <Link
+                                        to="/signup"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="
+                                        inline-flex items-center justify-center
+                                        px-4 py-1.5
+                                        rounded-md
+                                        border border-richblack-600
+                                        text-sm
+                                        transition-all duration-200
+                                        hover:bg-richblack-700 hover:text-yellow-25
+                                        "
+                                    >
+                                        Sign Up
+                                    </Link>
+                                    </div>
+                                )}
+
+                                {/* Logged in */}
+                                {token !== null && (
+                                    <div className= "">
+                                        <Link to= {"/dashboard/my-profile"} onClick= {() => setMobileMenuOpen(false)}>
+                                            Dashboard
+                                        </Link>
+                                        <ProfileDropdown />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )
+                }
+
                 {/* Login, Signup, Dashboard */}
                 <div className= "hidden items-center gap-x-4 md:flex">
                     {
@@ -165,8 +234,11 @@ const Navbar = () => {
                     }
                 </div>
 
-                {/*  */}
-                <button className="mr-4 md:hidden">
+                {/* Hamburger Menu */}
+                <button
+                    className="mr-4 md:hidden"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
                     <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
                 </button>
 

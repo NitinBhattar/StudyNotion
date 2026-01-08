@@ -75,7 +75,7 @@ const contactUsTemplate = (
             
             <body>
                 <div class="container">
-                    <a href="https://studynotion-edtech-project.vercel.app"><img class="logo"
+                    <a href="https://study-notion-ashy-beta.vercel.app"><img class="logo"
                             src="https://res.cloudinary.com/dgyau5i4c/image/upload/v1767790115/logo_tamn5v.png" alt="StudyNotion Logo"></a>
                     <div class="message">Contact Form Confirmation</div>
                     <div class="body">

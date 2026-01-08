@@ -43,12 +43,12 @@ export const FooterLink2 = [
     {
         title: "Career building",
         links: [
-            {title: "Career paths", link: "/catalog/career-paths"},
-            {title: "Career services", link: "/catalog/career-services"},
-            {title: "Interview prep", link: "/catalog/interview-prep"},
-            {title: "Professional certification", link: "/catalog/professional-certification"},
-            {title: "Full Catalog", link: "/catalog/full-catalog"},
-            {title: "Beta Content", link: "/catalog/beta-content"}
+            {title: "Career paths", link: "/career-paths"},
+            {title: "Career services", link: "/career-services"},
+            {title: "Interview prep", link: "/interview-prep"},
+            {title: "Professional certification", link: "/professional-certification"},
+            {title: "Full Catalog", link: "/full-catalog"},
+            {title: "Beta Content", link: "/beta-content"}
         ]
     }
 ];

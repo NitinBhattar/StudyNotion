@@ -8,7 +8,7 @@ import CTAButton from "./CTAButton";
 
 const CodeBlocks = ( {position, heading, subheading, CTAbtn1, CTAbtn2, codeColour, codeBlock, backgroundGradient} ) => {
   return (
-    <div className= {`flex ${position} my-20 justify-between gap-10`}>
+    <div className= {`flex ${position} flex-wrap my-20 justify-between gap-10`}>
         {/* Section1  */}
         <div className= "w-full lg:w-[50%] flex flex-col gap-8">
             {heading}

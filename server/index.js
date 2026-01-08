@@ -48,6 +48,14 @@ app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/reach", contactRoutes);
 
+// Cron-Job
+app.get("/api/v1/cron", (req, res) => {
+    // 200 is OK
+    return res.status(200).json({
+        status: "OK"
+    });
+});
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`Starting server at ${PORT}`);

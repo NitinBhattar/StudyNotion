@@ -148,7 +148,7 @@ const App = () => {
                 <Route
                     element={
                         <PrivateRoute>
-                        <ViewCourse />
+                            <ViewCourse />
                         </PrivateRoute>
                     }
                 >

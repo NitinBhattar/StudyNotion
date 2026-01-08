@@ -46,7 +46,7 @@ const Footer =  () => {
                                             key=  {index}
                                             className= "text-[14px] cursor-pointer hover:text-richblack-50 transition-all duration-200"
                                         >
-                                        <Link to= {element.toLowerCase()}>{element}</Link>
+                                        <Link to= {"/about"}>{element}</Link>
                                         </div>
                                     );
                                 })}
@@ -96,7 +96,7 @@ const Footer =  () => {
                             </h2>
 
                             <div className= "text-[14px] cursor-pointer hover:text-richblack-50 transition-all duration-200 mt-2">
-                                <Link to= {"/help-center"}>Help Center</Link>
+                                <Link to= {"/contact"}>Help Center</Link>
                             </div>
                         </div>
 
