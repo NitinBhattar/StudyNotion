@@ -25,7 +25,7 @@ app.use(
     cors({
         // Localhost 3000 for same machine, otherwise wherever the frontend is
         // Server only reads http request, so http not https
-        origin: "http://localhost:3000",
+        origin: process.env.FE_HOST,
         // credentials: true means the browser is allowed to send credentials with requests, for session-auth or JWT
         credentials: true
     })

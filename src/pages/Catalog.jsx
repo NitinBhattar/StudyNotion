@@ -51,8 +51,6 @@ const Catalog = () => {
                     // API Call
                     const result = await getCatalogPageData(categoryId);
 
-                    console.log("catalog", result);
-
                     if(result) {
                         setCatalogPageData(result);
                     }

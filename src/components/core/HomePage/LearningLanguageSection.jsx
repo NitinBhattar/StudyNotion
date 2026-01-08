@@ -1,7 +1,7 @@
 // Import
 // Components
-import HighlightText from "./HighlightText";
-import CTAButton from "./CTAButton";
+import HighlightText from "./HighlightText.jsx";
+import CTAButton from "./CTAButton.jsx";
 
 // Assets
 import Know_your_progress from "../../../assets/Images/Know_your_progress.png";

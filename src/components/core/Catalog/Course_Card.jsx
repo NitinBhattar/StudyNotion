@@ -8,8 +8,6 @@ function Course_Card({ course, Height }) {
     // States to keep track of avg. rating
     const [avgReviewCount, setAvgReviewCount] = useState(0);
 
-    console.log("course: ", course);
-
     // Average rating
     useEffect(() => {
         const count = GetAvgRating(course.ratingAndReview);

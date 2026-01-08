@@ -1,7 +1,7 @@
 // Import
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { buyCourse } from "../../../../services/operations/studentFeaturesAPI.js";
+import { buyCourse } from "../../../../services/Operations/studentFeaturesAPI.js";
 import IconBtn from "../../../common/IconBtn.jsx"
 
 const RenderTotalAmount = () => {

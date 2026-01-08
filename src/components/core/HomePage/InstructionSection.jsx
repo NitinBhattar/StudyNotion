@@ -1,12 +1,8 @@
 // Import
 // Modules
 import { FaArrowRight } from "react-icons/fa";
-
-// Components
-import HighlightText from "./HighlightText";
-import CTAButton from "./CTAButton";
-
-// Assets
+import HighlightText from "./HighlightText.jsx";
+import CTAButton from "./CTAButton.jsx";
 import Instructor from "../../../assets/Images/Instructor.png";
 
 const InstructionSection = () => {

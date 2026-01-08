@@ -9,7 +9,7 @@ import { fetchCourseDetails } from "../services/Operations/courseDetailsAPI.js";
 import { buyCourse } from "../services/Operations/studentFeaturesAPI.js";
 import formatDate from "../services/formatDate.js";
 import GetAvgRating from "../utils/avgRating.js";
-import ConfirmationModal from "../components/Common/ConfirmationModal.jsx";
+import ConfirmationModal from "../components/common/ConfirmationModal.jsx";
 import Footer from "../components/common/Footer.jsx";
 import RatingStars from "../components/common/RatingStars.jsx";
 import CourseAccordionBar from "../components/core/Course/CourseAccordionBar.jsx";

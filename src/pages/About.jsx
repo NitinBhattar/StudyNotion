@@ -4,7 +4,7 @@ import Quote from "../components/core/AboutPage/Quote.jsx";
 import StatsComponenet from "../components/core/AboutPage/Stats.jsx";
 import LearningGrid from "../components/core/AboutPage/LearningGrid.jsx";
 import ContactFormSection from "../components/core/AboutPage/ContactFormSection.jsx";
-// import ReviewSlider from "../components/Common/ReviewSlider.jsx";
+import ReviewSlider from "../components/common/ReviewSlider.jsx";
 import Footer from "../components/common/Footer.jsx";
 
 // Assets
@@ -123,7 +123,7 @@ const About = () => {
                     Reviews from other learners
                 </h2>
                 
-                {/* <ReviewSlider /> */}
+                <ReviewSlider />
             </div>
 
             {/* Footer */}

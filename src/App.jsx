@@ -14,7 +14,7 @@ import Signup from "./pages/Signup.jsx";
 import VerifyEmail from "./pages/VerifyEmail.jsx";
 import Login from "./pages/Login.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
-import UpdatePassword from "./pages/UpdatePAssword.jsx";
+import UpdatePassword from "./pages/UpdatePassword.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import ViewCourse from "./pages/ViewCourse.jsx";
 import Error from "./pages/Error.jsx";

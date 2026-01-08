@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import ReactStars from "react-rating-stars-component";
+import ReactStars from "react-stars";
 import { removeFromCart } from "../../../../slices/cartSlice.js";
 
 const RenderCartCourses = () => {

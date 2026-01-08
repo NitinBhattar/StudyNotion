@@ -7,7 +7,7 @@ import { FreeMode, Pagination } from "swiper/modules";
 import Course_Card from "./Course_Card.jsx"
 
 const Course_Slider = ({ Courses }) => {
-    console.log("courses: ", Courses);
+
     return (
         <div className= "">
         {
