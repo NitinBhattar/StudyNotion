@@ -72,10 +72,12 @@ StudyNotion/
 │       │   ├── common/
 │       │   └── core/
 │       ├── data/
+│       ├── hooks/
 │       ├── pages/
-│       ├── redux/
-│       │   └── slices/
+│       ├── reducer/
 │       ├── services/
+│       │   └── Operations/
+│       ├── slices/
 │       ├── utils/
 │       ├── App.jsx
 │       ├── main.jsx
@@ -83,8 +85,7 @@ StudyNotion/
 │
 ├── .gitignore
 ├── README.md
-├── LICENSE
-
+```
 
 ## ⚙️ Installation & Setup
 
@@ -92,97 +93,92 @@ StudyNotion/
 ```bash
 git clone https://github.com/NitinBhattar/StudyNotion.git
 cd StudyNotion
-2️⃣ Backend Setup
-bash
-Copy code
+```
+
+### 2️⃣ Backend Setup
+```bash
 cd backend
 npm install
+```
 Create a .env file:
+- env
+```
+PORT = 4000
+FE_HOST = http://localhost:3000
+FE_UPDATE_PASSWORD_URL = your_frontend's_update_password_url
 
-env
-Copy code
-PORT=5000
-MONGODB_URL=your_mongodb_url
-JWT_SECRET=your_jwt_secret
+MONGODB_URL = your_mongodb_url
 
-RAZORPAY_KEY_ID=your_key
-RAZORPAY_KEY_SECRET=your_secret
+JWT_SECRET = your_jwt_secret
 
-CLOUDINARY_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+RAZORPAY_KEY_ID = your_key
+RAZORPAY_KEY_SECRET = your_secret
 
-MAIL_HOST=smtp_host
-MAIL_USER=your_email
-MAIL_PASS=your_password
+CLOUDINARY_NAME = your_cloud_name
+CLOUDINARY_API_KEY = your_api_key
+CLOUDINARY_API_SECRET = your_api_secret
+
+BREVO_API_KEY = your_brevo_api
+BREVO_SENDER_EMAIL = your_email
+```
+
 Start backend:
-
-bash
-Copy code
+```bash
 npm run dev
-3️⃣ Frontend Setup
-bash
-Copy code
+```
+
+### 3️⃣ Frontend Setup
+```bash
 cd frontend
 npm install
+```
+
 Create .env:
+- env
+```
+VITE_BASE_URL = http://localhost:4000/api/v1
+VITE_RAZORPAY_KEY = your_razorpay_key
+```
 
-env
-Copy code
-VITE_BASE_URL=http://localhost:5000/api/v1
-VITE_RAZORPAY_KEY=your_razorpay_key
 Start frontend:
-
-bash
-Copy code
+```bash
 npm run dev
-🔑 Core Concepts Implemented
-Role-based authentication (Student / Instructor)
+```
 
-Course & category management
 
-Course progress tracking
+## 🔑 Core Concepts Implemented:
+- Role-based authentication (Student / Instructor)
+- Course & category management
+- Course progress tracking
+- Ratings & reviews
+- Secure payment verification
+- Protected routes
+- Responsive UI
 
-Ratings & reviews
 
-Secure payment verification
+## 🧪 API Highlights:
+- POST /auth/signup
+- POST /auth/login
+- GET /categories
+- GET /catalog/:category
+- PUT /courses/updateCourseProgress
 
-Protected routes
 
-Responsive UI
+## 📌 Future Improvements:
+- Pagination in catalog
+- Wishlist feature
+- Admin dashboard
+- Performance optimizations
 
-🧪 API Highlights
-POST /auth/signup
 
-POST /auth/login
+## 👤 Author:
+- Nitin Bhattar
+- GitHub: https://github.com/NitinBhattar
+- Vercel: https://study-notion-ashy-beta.vercel.app
 
-GET /categories
-
-GET /catalog/:category
-
-PUT /courses/updateCourseProgress
-
-📌 Future Improvements
-Email verification
-
-Pagination in catalog
-
-Wishlist feature
-
-Admin dashboard
-
-Performance optimizations
-
-👤 Author
-Nitin Bhattar
-GitHub: https://github.com/NitinBhattar
-
-📜 License
+## 📜 License
 This project is licensed under the MIT License.
 See the LICENSE file for details.
-
-sql
-Copy code
 
 ---
 
@@ -210,3 +206,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
