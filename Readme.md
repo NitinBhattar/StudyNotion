@@ -97,7 +97,7 @@ cd StudyNotion
 
 ### 2️⃣ Backend Setup
 ```bash
-cd backend
+cd server
 npm install
 ```
 Create a .env file:
@@ -129,7 +129,7 @@ npm run dev
 
 ### 3️⃣ Frontend Setup
 ```bash
-cd frontend
+cd src
 npm install
 ```
 
@@ -162,14 +162,6 @@ npm run dev
 - GET /categories
 - GET /catalog/:category
 - PUT /courses/updateCourseProgress
-
-
-## 📌 Future Improvements:
-- Pagination in catalog
-- Wishlist feature
-- Admin dashboard
-- Performance optimizations
-
 
 ## 👤 Author:
 - Nitin Bhattar
